@@ -21,7 +21,9 @@ export default async function handler(req, res) {
                     ownerId: 'cl864r44a0025zlrhinbymcl5', // TO DO: generalise
                 },
             });
+
             res.status(200).json(home);
+
         } catch (e) {
             res.status(500).json({message: 'Something went wrong'});
         }
