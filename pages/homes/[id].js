@@ -60,7 +60,10 @@ export async function getStaticPaths() {
         paths: homes.map(home => ({
             params: { id: home.id },
         })),
-        fallback: false,
+        // Define a fallback to continue lazily building pages at runtime.
+        // Will statically generate the requested route and run getStaticProps.
+        // Browser will re-render page and new path will be added to list of pre-rendered pages
+        fallback: true,
     };
 }
 
