@@ -24,4 +24,11 @@ export default NextAuth({
         }),
     ],
     adapter: PrismaAdapter(prisma),
+    pages: {
+        // user will be redirected to homepage after
+        signIn: '/',
+        signOut: '/',
+        error: '/',
+        verifyRequest: '/',
+    },
 });

@@ -9,6 +9,8 @@ import { Dialog, Transition } from '@headlessui/react';
 import { SparklesIcon, MailOpenIcon, XIcon } from '@heroicons/react/outline';
 import Input from './Input';
 
+import { signIn } from 'next-auth/react';
+
 const SignInSchema = Yup.object().shape({
   email: Yup.string()
     .trim()
@@ -68,7 +70,27 @@ const AuthModal = ({ show = false, onClose = () => null }) => {
   const [showSignIn, setShowSignIn] = useState(false);
 
   const signInWithEmail = async ({ email }) => {
-    // TODO: Perform email auth
+    let toastId;
+    try {
+      toastId = toast.loading('Loading...');
+      setDisabled(true);
+      // Perform sign in
+      const { error } = await signIn('email', {
+        redirect: false,
+        callbackUrl: window.location.href, // url of current page
+        email,
+      });
+      // Something went wrong
+      if (error) {
+        throw new Error(error);
+      }
+      setConfirm(true);
+      toast.dismiss(toastId);
+    } catch (err) {
+      toast.error('Unable to sign in', { id: toastId });
+    } finally {
+      setDisabled(false);
+    }
   };
 
   const signInWithGoogle = () => {
@@ -84,7 +106,7 @@ const AuthModal = ({ show = false, onClose = () => null }) => {
   // Reset modal
   useEffect(() => {
     if (!show) {
-      // Wait for 200ms for aniamtion to finish
+      // Wait for 200ms for animation to finish
       setTimeout(() => {
         setDisabled(false);
         setConfirm(false);
