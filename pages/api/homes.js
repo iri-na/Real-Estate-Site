@@ -1,13 +1,24 @@
+import { getSession } from 'next-auth/react';
 import {PrismaClient} from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
+    const session = await getSession({ req });
+    if (!session) {
+        return res.status(401).json({ message: 'Unauthorized.' });
+    }
+
     if (req.method === 'POST') {
         try {
             const {image, title, description, price, guests, beds, baths} =
                 req.body;
             console.log(req.body);
+
+            // Retrieve the current authenticated user
+            const user = await prisma.user.findUnique({
+                where: { email: session.user.email },
+            });
 
             const home = await prisma.home.create({
                 data: {
@@ -18,7 +29,7 @@ export default async function handler(req, res) {
                     guests,
                     beds,
                     baths,
-                    ownerId: 'cl864r44a0025zlrhinbymcl5', // TO DO: generalise
+                    ownerId: user.id,
                 },
             });
 
