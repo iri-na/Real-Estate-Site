@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
+import { useRouter } from "next/router";
 import { PrismaClient } from '@prisma/client';
 
 // Instantiate Prisma Client
@@ -12,8 +13,11 @@ const prisma = new PrismaClient();
 
 const ListedHome = (home = null) => {
     const { data: session } = useSession();
+    const router = useRouter();
 
     const [isOwner, setIsOwner] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+
     useEffect(() => {
         (async () => {
             if (session?.user) {
@@ -26,10 +30,6 @@ const ListedHome = (home = null) => {
             }
         })();
     }, [session?.user]);
-
-    const router = useRouter();
-
-    const [deleting, setDeleting] = useState(false);
 
     const deleteHome = async () => {
         let toastId;
