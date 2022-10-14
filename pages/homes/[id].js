@@ -15,6 +15,11 @@ const ListedHome = (home = null) => {
     const { data: session } = useSession();
     const router = useRouter();
 
+    // Should only render edit/delete buttons if the authenticated user is the owner.
+    // Create new endpoint and call it from the client-side to decide whether to render buttons
+    // We statically generate page then when the page loads,
+    // we query the owner endpoint to fetch owner and update the UI accordingly
+
     const [isOwner, setIsOwner] = useState(false);
     const [deleting, setDeleting] = useState(false);
 
