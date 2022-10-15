@@ -6,10 +6,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 import { useRouter } from "next/router";
-import { PrismaClient } from '@prisma/client';
-
-// Instantiate Prisma Client
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
 
 const ListedHome = (home = null) => {
     const { data: session } = useSession();

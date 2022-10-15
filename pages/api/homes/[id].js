@@ -1,8 +1,6 @@
 import { getSession } from 'next-auth/react';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 import { createClient } from '@supabase/supabase-js';
-
-const prisma = new PrismaClient();
 
 const supabase = createClient(
     process.env.SUPABASE_URL,
